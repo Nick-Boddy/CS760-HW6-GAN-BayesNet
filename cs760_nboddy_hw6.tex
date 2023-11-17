@@ -112,14 +112,14 @@
 
 \title{\textsc{Homework 6}} % Title
 
-%%% NOTE:  Replace 'NAME HERE' etc., and delete any "\red{}" wrappers (so it won't show up as red)
 
 \author{
-	\red{$>>$NAME HERE$<<$} \\
-	\red{$>>$ID HERE$<<$}\\
+	Nick Boddy \\
+	nboddy \\
+	GitHub repo: github.com/Nick-Boddy/CS760-HW6-GAN-BayesNet \\
 } 
 
-\date{}
+\date{2023-11-17}
 
 \begin{document}
 	
@@ -227,7 +227,28 @@ Consider the directed graphical model (aka Bayesian network) in Figure~\ref{fig:
 \end{figure}
 Compute $P(B=t \mid E=f,J=t,M=t)$ and $P(B=t \mid E=t,J=t,M=t)$. (10 points for each) These are the conditional probabilities of a burglar in your house (yikes!) when both of your neighbors John and Mary call you and say they hear an alarm in your house, but without or with an earthquake also going on in that area (what a busy day), respectively.
 
-\begin{soln}  Solution goes here. \end{soln}
+\begin{soln}
+	$$P(B=t \mid E=f,J=t,M=t)$$
+	$$ = P(B \mid \neg E, J, M) = \frac{P(B, \neg E, J, M)}{P(\neg E, J, M)}$$
+	$$ = \frac{P(B, \neg E, J, M)}{P(B, \neg E, J, M) + P(\neg B, \neg E, J, M)}$$
+	$$P(B, \neg E, J, M) = \sum_{a \in \{A, \neg A\}} P(B) P(\neg E) P(a | B, \neg E) P(J | a) P(M | a)$$
+	$$ = (0.1)(0.8)(0.8)(0.9)(0.7) + (0.1)(0.8)(0.2)(0.2)(0.1) = 0.04064$$
+	$$P(\neg B, \neg E, J, M) = \sum_{a \in \{A, \neg A\}} P(\neg B) P(\neg E) P(a | \neg B \neg E) P(J | a) P(M | a)$$
+	$$ = (0.9)(0.8)(0.1)(0.9)(0.7) + (0.9)(0.8)(0.9)(0.2)(0.1) = 0.05832$$
+	$$P(B \mid \neg E, J, M) = \frac{0.04064}{0.04064 + 0.05832} = 0.410670978$$
+	\\ \\
+	$$P(B=t \mid E=t,J=t,M=t)$$
+	$$ = P(B \mid E, J, M) = \frac{P(B, E, J, M)}{P(E, J, M)}$$
+	$$ = \frac{P(B, E, J, M)}{P(B, E, J, M) + P(\neg B, E, J, M)}$$
+	$$P(B, E, J, M) = \sum_{a \in \{A, \neg A\}} P(B) P(E) P(a | B, E) P(J | a) P(M | a)$$
+	$$ = (0.1)(0.2)(0.9)(0.9)(0.7) + (0.1)(0.2)(0.1)(0.2)(0.1) = 0.01138$$
+	$$P(\neg B, E, J, M) = \sum_{a \in \{A, \neg A\}} P(\neg B) P(E) P(a | \neg B, E) P(J | a) P(M | a)$$
+	$$ = (0.9)(0.2)(0.3)(0.9)(0.7) + (0.9)(0.2)(0.7)(0.2)(0.1) = 0.03654$$
+	$$P(B \mid E, J, M) = \frac{0.01138}{0.01138 + 0.03654} = 0.237479132$$
+	\\ \\
+	$$P(B \mid \neg E, J, M) \approx 0.411$$
+	$$P(B \mid E, J, M) \approx 0.237$$
+\end{soln}
 
 
 \section{Chow-Liu Algorithm [25 pts]}
