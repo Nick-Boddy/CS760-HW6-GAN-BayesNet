@@ -32,6 +32,7 @@
 \usepackage{algpseudocode}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{tikz}
 
 
 \urlstyle{rm}
@@ -280,10 +281,86 @@ Suppose we wish to construct a directed graphical model for 3 features $X$, $Y$,
 
 \begin{enumerate}
 	\item Compute the mutual information $I(X, Y)$ based on the frequencies observed in the data. (5 pts)
+	
+	\begin{soln}
+		$$I(X, Y) = \sum_{x \in \{X, \neg X\}} \sum_{y \in \{Y, \neg Y\}} P(x,y) \log_2 \frac{P(x,y)}{P(x) P(y)}$$
+		$$ = 0.4 \log_2 \frac{0.4}{0.5 \times 0.5} + 0.1 \log_2 \frac{0.1}{0.5 \times 0.5} + 0.1 \log_2 \frac{0.1}{0.5 \times 0.5} + 0.4 \log_2 \frac{0.4}{0.5 \times 0.5}$$
+		$$ \approx 0.2781$$
+	\end{soln}
+	
 	\item Compute the mutual information $I(X, Z)$ based on the frequencies observed in the data. (5 pts)
+	
+	\begin{soln}
+		$$I(X, Z) = \sum_{x \in \{X, \neg X\}} \sum_{z \in \{Z, \neg Z\}} P(x,z) \log_2 \frac{P(x,z)}{P(x) P(z)}$$
+		$$ = 0.38 \log_2 \frac{0.38}{0.5 \times 0.55} + 0.12 \log_2 \frac{0.12}{0.5 \times 0.45} + 0.17 \log_2 \frac{0.17}{0.5 \times 0.55} + 0.33 \log_2 \frac{0.33}{0.5 \times 0.45}$$
+		$$ \approx 0.1328$$
+	\end{soln}
+	
 	\item Compute the mutual information $I(Z, Y)$ based on the frequencies observed in the data. (5 pts)
+	
+	\begin{soln}
+		$$I(Z, Y) = \sum_{z \in \{Z, \neg Z\}} \sum_{y \in \{Y, \neg Y\}} P(z,y) \log_2 \frac{P(z,y)}{P(z) P(y)}$$
+		$$ = 0.45 \log_2 \frac{0.45}{0.55 \times 0.5} + 0.1 \log_2 \frac{0.1}{0.55 \times 0.5} + 0.05 \log_2 \frac{0.05}{0.45 \times 0.5} + 0.4 \log_2 \frac{0.4}{0.45 \times 0.5}$$
+		$$ \approx 0.3973$$
+	\end{soln}
+	
 	\item Which undirected edges will be selected by the Chow-Liu algorithm as the maximum spanning tree? (5 pts)
+	
+	\begin{soln}
+		The candidate edges are $(X, Y)$, $(X, Z)$ and $(Y, Z)$. The Chow-Liu algorithm first selects the edge with the largest weight (in this case, our edge weights are the mutual information), which will be $(Y, Z)$ with a mutual information of $0.3973$. \\
+		The next largest edge will be $(X, Y)$ with a weight of $0.2781$. \\
+		The next largest edge is $(X, Z)$ with a weight of $0.1328$, but since adding $(X, Z)$ creates a cycle in the graph, we do not add it. \\ \\
+		So the maximum spanning tree generated is $G = \bigg(V := \{X, Y, Z\}, E := \{(Y, Z), (X, Y)\}\bigg)$
+	\end{soln}
+
 	\item Root your tree at node $X$, assign directions to the selected edges. (5 pts)
+	
+	\begin{soln}
+		\begin{center}
+			\begin{tikzpicture}
+				\node[circle, draw] (X) at (1,2) {X};
+				\node[circle, draw] (Y) at (0,0) {Y};
+				\node[circle, draw] (Z) at (2,0) {Z};
+				\draw[->] (X) -- (Y);
+				\draw[->] (Y) -- (Z);
+			\end{tikzpicture}
+		\end{center}
+		\[
+		P(X) =
+		\begin{tabular}{|c  c|}
+			\hline
+			T & F \\
+			\hline
+			0.5 & 0.5 \\
+			\hline
+		\end{tabular}
+		\]
+		
+		\[
+		P(Y \mid X) =
+		\begin{tabular}{| c | c  c |}
+			\hline
+			X & T & F \\
+			\hline
+			T & 0.8 & 0.2 \\
+			F & 0.2 & 0.8 \\
+			\hline
+		\end{tabular}
+		\]
+		
+		\[
+		P(Z \mid Y) =
+		\begin{tabular}{| c | c  c |}
+			\hline
+			Y & T & F \\
+			\hline
+			T & 0.9 & 0.1 \\
+			F & 0.2 & 0.8 \\
+			\hline
+		\end{tabular}
+		\]
+	\end{soln}
+	
 \end{enumerate}
 
 	\bibliography{hw6}
