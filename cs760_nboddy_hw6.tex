@@ -195,7 +195,38 @@
 		\end{figure}
 		
 		
-		\begin{soln}  Solution goes here. Attach your learning curve and images. \end{soln}
+		\begin{soln}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=4in]{1a_curve.png}
+				\caption{My learning curve}
+				\label{fig:gan_q1_loss}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1a_e1.png}
+					\caption{epoch 1}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1a_e50.png}
+					\caption{epoch 50}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1a_e100.png}
+					\caption{epoch 100}
+				\end{subfigure}
+				\caption{My generated images from $G$}
+				\label{fig:three graphs}
+			\end{figure}
+		\end{soln}
 		
 		
 		
@@ -208,7 +239,40 @@
         You may find this helpful: https://jonathan-hui.medium.com/gan-what-is-wrong-with-the-gan-cost-function-6f594162ce01
 		\hfill (10 pts)
 		
-		\begin{soln}  Solution goes here. Attach your learning curve and images. \end{soln}
+		\begin{soln}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=4in]{1b_curve.png}
+				\caption{My learning curve}
+				\label{fig:gan_q1_loss}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1b_e1.png}
+					\caption{epoch 1}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1b_e50.png}
+					\caption{epoch 50}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1b_e100.png}
+					\caption{epoch 100}
+				\end{subfigure}
+				\caption{My generated images from $G$ using an altered update rule}
+				\label{fig:three graphs}
+			\end{figure}
+			
+			The results of using this altered rule for updating the generator clearly does not result in realistic images. This makes sense, since the new update rule of descending $\nabla_{\theta_{g}}  \cfrac{1}{n_{z}}  \sum_{i=1}^{n_{z}}\log (1-D(G(z^{(i)})))\big )$ diminishes when the discriminator improves. Even though conceptually the $\theta_{g}$ that minimizes $\cfrac{1}{n_{z}}  \sum_{i=1}^{n_{z}}\log (1-D(G(z^{(i)})))\big )$ is the same $\theta_{g}$ that maximizes $\cfrac{1}{n_{z}} \sum_{i=1}^{n_{z}}  \log D(G(z^{(i)}))\big )$, when considering the backpropagating gradients, the former values diminish to the point where the gradient vanishes, whereas the latter (which is used in part a), does not vanish (but could possibly be unstable).
+			
+		\end{soln}
 		
 		\item Except the method that we used in (a), how can we improve training for GAN? Implement that and report your setup, learning curves, and generated images in epoch 1, 50, 100.
         This question is an open-ended question and you can choose whichever method you want.
