@@ -279,7 +279,115 @@
 		\hfill (20 pts)
 		
 		\begin{soln}
-			I've tried a couple modifications, some more successful than others. I tried altering the labels to be more smooth in training, with a $0.9$ for real images instead of $1$, and $0.1$ for fake images instead of $0$.
+			I've tried a couple modifications, some more successful than others. I tried altering the labels to be more smooth in training, with a $0.9$ for real images instead of $1$, and $0.1$ for fake images instead of $0$. \\
+			Another modification I tried was adjusting the optimizers to have a decaying learning rate. However, after applying with many different decay rates and other hyperparameters, I couldn't see any improvement. In fact, most of the time I found that the discriminator reached a (relatively) optimal state really early, which prevented the generator from improving at all. \\
+			A third modification that actually saw improvements was adding some noise to the real images when training the discriminator. Conceptually, I would suppose that this helps to stabilize the gradient. So the added noise remains in the final training method. \\
+			Lastly, I changed some of the parameters to the models and batching, and trained up to 200 epochs. This did improve performance, even at 100 epochs. Figures and final parameters are given below.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=4in]{1c_curve.png}
+				\caption{My learning curve}
+				\label{fig:gan_q1_loss}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e1.png}
+					\caption{epoch 1}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e25.png}
+					\caption{epoch 25}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e50.png}
+					\caption{epoch 50}
+				\end{subfigure}
+				\label{fig:three graphs}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e100.png}
+					\caption{epoch 100}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e150.png}
+					\caption{epoch 150}
+				\end{subfigure}
+				\hfill
+				\begin{subfigure}[b]{0.3\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{1c_e200.png}
+					\caption{epoch 200}
+				\end{subfigure}
+				\caption{Generated $G$ images after improvements}
+				\label{fig:three graphs}
+			\end{figure}
+			
+			\begin{verbatim}
+				PARAMETERS
+				
+				
+				# learning parameters
+				batch_size = 256
+				epochs = 200
+				sample_size = 64 # fixed sample size for generator
+				nz = 128 # latent vector size
+				k = 1 # number of steps to apply to the discriminator
+				
+				
+				optimizer type: Adam
+				optimizer learning rate: 0.0002
+				loss function: Binary Cross-Entropy
+				added (clamped) noise to real images that follows a standard Gaussian * 0.1
+				
+				
+				##### GENERATOR #####
+				Generator(
+					(main): Sequential(
+					(0): Linear(in_features=128, out_features=256, bias=True)
+					(1): LeakyReLU(negative_slope=0.2)
+					(2): Linear(in_features=256, out_features=512, bias=True)
+					(3): LeakyReLU(negative_slope=0.2)
+					(4): Linear(in_features=512, out_features=1024, bias=True)
+					(5): LeakyReLU(negative_slope=0.2)
+					(6): Linear(in_features=1024, out_features=784, bias=True)
+					(7): Tanh()
+					)
+				)
+				######################
+				
+				##### DISCRIMINATOR #####
+				Discriminator(
+					(main): Sequential(
+					(0): Linear(in_features=784, out_features=1024, bias=True)
+					(1): LeakyReLU(negative_slope=0.3)
+					(2): Dropout(p=0.4, inplace=False)
+					(3): Linear(in_features=1024, out_features=512, bias=True)
+					(4): LeakyReLU(negative_slope=0.3)
+					(5): Dropout(p=0.4, inplace=False)
+					(6): Linear(in_features=512, out_features=256, bias=True)
+					(7): LeakyReLU(negative_slope=0.3)
+					(8): Dropout(p=0.4, inplace=False)
+					(9): Linear(in_features=256, out_features=1, bias=True)
+					(10): Sigmoid()
+					)
+				)
+				######################
+			\end{verbatim}
+			
 		\end{soln}
 		
 	\end{enumerate}
